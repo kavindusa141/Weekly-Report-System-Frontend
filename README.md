@@ -13,12 +13,14 @@ You will need to install the dependencies for both the frontend and the backend 
 cd Weekly-Report-System-Frontend
 npm install
 ```
+*Key frontend libraries installed: `react`, `react-dom`, `lucide-react` (icons), and `react-scripts`.*
 
 **Backend:**
 ```bash
 cd Weekly-Report-System-Backend
 npm install
 ```
+*Key backend libraries installed: `express` (API framework), `mongoose` (MongoDB object modeling), `jsonwebtoken` & `bcryptjs` (authentication), and `groq-sdk` (Groq AI integration).*
 
 ### 2. Running the Database
 
