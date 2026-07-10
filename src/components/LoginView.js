@@ -14,7 +14,7 @@ export default function LoginView({ onLoginSuccess, onNavigate }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
+
     if (!email.trim() || !password.trim()) {
       setError('Please enter your email and password.');
       return;
@@ -34,7 +34,7 @@ export default function LoginView({ onLoginSuccess, onNavigate }) {
   return (
     <div style={styles.container} className="animate-fade-in">
       <div style={styles.glow} />
-      
+
       <div style={styles.backNav}>
         <button
           onClick={() => onNavigate('landing')}
@@ -55,7 +55,7 @@ export default function LoginView({ onLoginSuccess, onNavigate }) {
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
             <BarChart3 size={40} style={{ color: 'var(--primary)' }} />
           </div>
-          <h2 style={styles.title}>Sign in to WeeklySync</h2>
+          <h2 style={styles.title}>Sign in to Weekly Report System</h2>
           <p style={styles.subtitle}>Enter your details or use a pre-seeded developer profile.</p>
         </div>
 
@@ -70,7 +70,7 @@ export default function LoginView({ onLoginSuccess, onNavigate }) {
           <InputField
             label="Email Address"
             type="email"
-            placeholder="e.g. sarah@team.com"
+            placeholder="Your Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={loading}

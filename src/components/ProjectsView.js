@@ -3,7 +3,7 @@ import { api } from '../services/api';
 import Card from './ui/Card';
 import InputField from './ui/InputField';
 import Button from './ui/Button';
-import { FolderPlus, FolderGit, Edit, Trash2, AlertCircle, BarChart3 } from 'lucide-react';
+import { FolderPlus, FolderGit, Edit, Trash2, AlertCircle, BarChart3, Users } from 'lucide-react';
 
 export default function ProjectsView({ currentUser, token, triggerToast }) {
   const [projects, setProjects] = useState([]);
@@ -11,6 +11,8 @@ export default function ProjectsView({ currentUser, token, triggerToast }) {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [systemUsers, setSystemUsers] = useState([]);
+  const [managingMembersFor, setManagingMembersFor] = useState(null);
   
   // Form State
   const [projectId, setProjectId] = useState(null);
@@ -27,6 +29,11 @@ export default function ProjectsView({ currentUser, token, triggerToast }) {
       ]);
       setProjects(allProjects);
       setReports(allReports);
+      
+      if (currentUser.role === 'manager') {
+        const users = await api.getMembers(token);
+        setSystemUsers(users);
+      }
     } catch (err) {
       triggerToast(err.message || 'Error loading projects.', 'danger');
     } finally {
@@ -141,6 +148,31 @@ export default function ProjectsView({ currentUser, token, triggerToast }) {
     setName('');
     setDescription('');
     setFormError('');
+  };
+
+  const toggleMember = async (projId, userId, isMember) => {
+    setActionLoading(true);
+    try {
+      if (isMember) {
+        await api.removeProjectMember(token, projId, userId);
+      } else {
+        await api.addProjectMember(token, projId, userId);
+      }
+      
+      // Update local state to avoid full reload
+      const updatedProjects = await api.getProjects(token);
+      setProjects(updatedProjects);
+      
+      // Update the managingMembersFor reference so the modal updates live
+      const updatedProj = updatedProjects.find(p => p.id === projId);
+      setManagingMembersFor(updatedProj);
+      
+      triggerToast(isMember ? 'Member removed from project.' : 'Member added to project.', 'success');
+    } catch (err) {
+      triggerToast(err.message, 'danger');
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   const filteredProjects = projects.filter(p =>
@@ -258,6 +290,17 @@ export default function ProjectsView({ currentUser, token, triggerToast }) {
                   </div>
 
                   <div style={styles.actionColumn}>
+                    {currentUser.role === 'manager' && (
+                      <Button
+                        variant="secondary"
+                        onClick={() => setManagingMembersFor(proj)}
+                        style={{ ...styles.actionBtn, display: 'flex', alignItems: 'center', gap: '4px', justifyContent: 'center' }}
+                        disabled={actionLoading}
+                      >
+                        <Users size={12} />
+                        <span>Members</span>
+                      </Button>
+                    )}
                     <Button
                       variant="secondary"
                       onClick={() => handleEdit(proj)}
@@ -283,11 +326,66 @@ export default function ProjectsView({ currentUser, token, triggerToast }) {
           </div>
         )}
       </Card>
+
+      {/* Member Management Modal */}
+      {managingMembersFor && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modalContent}>
+            <h3 style={{ marginBottom: '16px', color: 'var(--text-primary)' }}>Manage Members: {managingMembersFor.name}</h3>
+            <div style={{ maxHeight: '300px', overflowY: 'auto', marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {systemUsers.map(u => {
+                const isMember = managingMembersFor.members.some(m => (m._id || m) === u.id);
+                return (
+                  <div key={u.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
+                    <div>
+                      <div style={{ fontWeight: '600', fontSize: '0.9rem', color: 'var(--text-primary)' }}>{u.name}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{u.email}</div>
+                    </div>
+                    <Button 
+                       variant={isMember ? 'danger' : 'secondary'}
+                       onClick={() => toggleMember(managingMembersFor.id, u.id, isMember)}
+                       disabled={actionLoading}
+                       style={{ padding: '6px 14px', fontSize: '0.8rem', minHeight: 'auto' }}
+                    >
+                       {isMember ? 'Remove' : 'Assign'}
+                    </Button>
+                  </div>
+                )
+              })}
+              {systemUsers.length === 0 && (
+                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>No users available.</p>
+              )}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+               <Button variant="secondary" onClick={() => setManagingMembersFor(null)}>Close</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 const styles = {
+  modalOverlay: {
+    position: 'fixed',
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+    backdropFilter: 'blur(3px)'
+  },
+  modalContent: {
+    backgroundColor: 'var(--bg-secondary)',
+    padding: '24px',
+    borderRadius: '12px',
+    width: '90%',
+    maxWidth: '500px',
+    border: '1px solid var(--border-color)',
+    boxShadow: '0 12px 40px rgba(0,0,0,0.3)'
+  },
   loaderContainer: {
     display: 'flex',
     flexDirection: 'column',

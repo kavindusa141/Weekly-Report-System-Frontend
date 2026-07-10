@@ -65,7 +65,8 @@ const mapProjectToFrontend = (p) => ({
   id: p._id,
   name: p.name,
   type: p.type || 'PROJECT',
-  description: p.description || ''
+  description: p.description || '',
+  members: p.members || []
 });
 
 // User mapping
@@ -221,6 +222,40 @@ export const api = {
   // Delete Project (Protected: Manager only RBAC check)
   deleteProject: async (token, projectId) => {
     await request(`/projects/${projectId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return { success: true };
+  },
+
+  // Add Project Member (Protected: Manager only)
+  addProjectMember: async (token, projectId, userId) => {
+    const data = await request(`/projects/${projectId}/members`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ userId })
+    });
+    return data;
+  },
+
+  // Remove Project Member (Protected: Manager only)
+  removeProjectMember: async (token, projectId, userId) => {
+    const data = await request(`/projects/${projectId}/members/${userId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return data;
+  },
+
+  // Delete/Deactivate User (Protected: Manager only)
+  deleteUser: async (token, userId) => {
+    await request(`/auth/users/${userId}`, {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`

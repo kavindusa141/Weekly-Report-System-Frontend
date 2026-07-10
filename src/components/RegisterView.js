@@ -10,7 +10,7 @@ export default function RegisterView({ onRegisterSuccess, onNavigate }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
-  
+
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -69,7 +69,7 @@ export default function RegisterView({ onRegisterSuccess, onNavigate }) {
             <UserPlus size={40} style={{ color: 'var(--primary)' }} />
           </div>
           <h2 style={styles.title}>Create your account</h2>
-          <p style={styles.subtitle}>Self-registered users default to the **Team Member** role.</p>
+          <p style={styles.subtitle}>Self-registered users default to the Team Member role.</p>
         </div>
 
         {error && (
@@ -82,7 +82,7 @@ export default function RegisterView({ onRegisterSuccess, onNavigate }) {
         <form onSubmit={handleSubmit} style={styles.form}>
           <InputField
             label="Full Name"
-            placeholder="Sarah Connor"
+            placeholder="Your Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             disabled={loading}
@@ -92,7 +92,7 @@ export default function RegisterView({ onRegisterSuccess, onNavigate }) {
           <InputField
             label="Email Address"
             type="email"
-            placeholder="sarah@team.com"
+            placeholder="Your Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={loading}
@@ -102,7 +102,7 @@ export default function RegisterView({ onRegisterSuccess, onNavigate }) {
           <InputField
             label="Password"
             type="password"
-            placeholder="Min. 6 characters"
+            placeholder="Your Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}

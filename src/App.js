@@ -8,6 +8,7 @@ import RegisterView from './components/RegisterView';
 import DashboardView from './components/DashboardView';
 import ProjectsView from './components/ProjectsView';
 import ReportsView from './components/ReportsView';
+import UsersView from './components/UsersView';
 
 // UI Layout & Alerts
 import Sidebar from './components/Sidebar';
@@ -107,6 +108,8 @@ function App() {
         return <ProjectsView currentUser={currentUser} token={token} triggerToast={triggerToast} />;
       case 'reports':
         return <ReportsView currentUser={currentUser} token={token} triggerToast={triggerToast} />;
+      case 'users':
+        return <UsersView currentUser={currentUser} token={token} triggerToast={triggerToast} />;
       default:
         return (
           <div style={{ padding: '40px', textAlign: 'center' }}>

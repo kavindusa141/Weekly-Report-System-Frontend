@@ -1,9 +1,9 @@
 import React from 'react';
-import { BarChart3, LayoutDashboard, Folder, ClipboardList, Sun, Moon, LogOut } from 'lucide-react';
+import { BarChart3, LayoutDashboard, Folder, ClipboardList, Sun, Moon, LogOut, Users } from 'lucide-react';
 
 export default function Sidebar({ currentUser, currentView, onViewChange, onLogout, theme, onToggleTheme }) {
   if (!currentUser) return null;
-  
+
   const isManager = currentUser.role === 'manager';
 
   return (
@@ -12,8 +12,7 @@ export default function Sidebar({ currentUser, currentView, onViewChange, onLogo
       <div style={styles.brand}>
         <BarChart3 size={28} style={{ color: 'var(--primary)' }} />
         <div>
-          <h1 style={styles.brandTitle}>WeeklySync</h1>
-          <span style={styles.brandVersion}>v1.0 (Demo)</span>
+          <h1 style={styles.brandTitle}>Weekly Report System</h1>
         </div>
       </div>
 
@@ -62,6 +61,19 @@ export default function Sidebar({ currentUser, currentView, onViewChange, onLogo
               <Folder size={18} />
               <span>Projects / Tags</span>
             </button>
+            <button
+              onClick={() => onViewChange('users')}
+              style={{
+                ...styles.navBtn,
+                ...(currentView === 'users' ? styles.activeNavBtn : {}),
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+              }}
+            >
+              <Users size={18} />
+              <span>User Management</span>
+            </button>
           </>
         ) : (
           <button
@@ -99,7 +111,7 @@ export default function Sidebar({ currentUser, currentView, onViewChange, onLogo
             </>
           )}
         </button>
-        
+
         <button
           onClick={onLogout}
           style={styles.logoutBtn}

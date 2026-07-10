@@ -1,70 +1,59 @@
-# Getting Started with Create React App
+# Weekly Report System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains the Weekly Report System consisting of a React frontend, Node.js/Express backend, and a MongoDB database.
 
-## Available Scripts
+## Setup Instructions
 
-In the project directory, you can run:
+### 1. Installing Dependencies
 
-### `npm start`
+You will need to install the dependencies for both the frontend and the backend separately. Open your terminal and run the following commands:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Frontend:**
+```bash
+cd Weekly-Report-System-Frontend
+npm install
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**Backend:**
+```bash
+cd Weekly-Report-System-Backend
+npm install
+```
 
-### `npm test`
+### 2. Running the Database
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This project uses MongoDB as its database. You can either use a cloud instance (MongoDB Atlas) or a local MongoDB server.
 
-### `npm run build`
+1. Navigate to the `Weekly-Report-System-Backend` directory.
+2. Ensure you have a `.env` file with the following variables configured (replace with your actual database credentials):
+   ```env
+   NODE_ENV=development
+   PORT=5001
+   MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/?appName=Cluster0
+   JWT_SECRET=your_super_secret_key_for_authentication
+   GROQ_API_KEY=your_groq_api_key
+   ```
+3. **If using MongoDB Atlas**: Ensure your IP address is whitelisted in your Atlas cluster's Network Access settings. The database runs in the cloud automatically.
+4. **If using Local MongoDB**: Ensure your MongoDB service is running locally (`mongod`), and update your `MONGO_URI` to `mongodb://localhost:27017/weekly_report_db`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 3. Running Backend
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To start the Node.js/Express backend server in development mode (with hot-reloading using nodemon):
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+cd Weekly-Report-System-Backend
+npm run dev
+```
 
-### `npm run eject`
+The server should now be running and listening for API requests (e.g., at `http://localhost:5001`).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 4. Running Frontend
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To start the React frontend application in development mode:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+cd Weekly-Report-System-Frontend
+npm run dev
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This will launch the frontend on `http://localhost:3000`. The page will automatically reload if you make any changes to the code.
